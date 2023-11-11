@@ -1,10 +1,7 @@
-﻿#include <iostream>
 #include <Windows.h>
-
 #include "Globals/Globals.h"
 #include "Window/WindowProc.h"
 #include "Window/Window.h"
-
 
 void RegisterStaticWindowClass(const std::string& ClassName) {
 	WNDCLASSEXA wc = {};
@@ -24,19 +21,12 @@ void RegisterMovableWindowClass(const std::string& ClassName) {
 	RegisterClassExA(&wc);
 }
 
-
-void RepaintAllWindows()
-{
-	for (auto& window : windowList) {
-		RECT windowRect;
-		GetWindowRect(window->getHwnd(), &windowRect);
-		InvalidateRect(window->getHwnd(), &windowRect, true);
-	}
+void RepaintAllWindows() {
+	for (auto& window : windowList)
+		InvalidateRect(window->getHwnd(), NULL, TRUE);
 }
 
-
-int main()
-{
+int main() {
 	for (auto& window : windowList) {
 		std::cout << window->getHwnd() << "!\n";
 	}
@@ -44,7 +34,7 @@ int main()
 	RegisterStaticWindowClass("StaticWindow");
 	Window staticWin = Window("StaticWindow",
 		"1",
-		WindowShape{winSize, winSize},
+		WindowShape{ winSize, winSize },
 		POINT{ 0, 0 });
 
 	RegisterStaticWindowClass("MovableWindow");
@@ -53,35 +43,29 @@ int main()
 		WindowShape{ winSize, winSize },
 		POINT{ long(1.5 * winSize), 0 });
 
-	MSG msg;
-
+	MSG msg { 0 };
 	while (GetMessage(&msg, NULL, 0, 0)) {
 		if (msg.message == WM_KEYDOWN) {
 			switch (msg.wParam) {
 			case 'W':
 				circle.y -= step;
 				break;
-
 			case 'A':
 				circle.x -= step;
 				break;
-
 			case 'S':
 				circle.y += step;
 				break;
-
 			case 'D':
 				circle.x += step;
 				break;
 			}
-
 			RepaintAllWindows();
-		}
-		else {
+		} else {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
 	}
-
-	return EXIT_SUCCESS;
+	return 0;
 }
+

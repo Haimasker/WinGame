@@ -3,7 +3,7 @@
 
 #include <Windows.h>
 #include <unordered_map>
-//#include "../Window/Window.h"
+#include <vector>
 
 class Window;
 
@@ -17,3 +17,4 @@ extern int step;
 extern std::unordered_map<std::string, long> windowStyles;
 
 #endif
+

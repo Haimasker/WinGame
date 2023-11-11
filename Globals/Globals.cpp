@@ -8,8 +8,7 @@ uint16_t circleRadius = 0.2 * winSize;
 
 int step = 4;
 
-std::unordered_map<std::string, long> windowStyles =
-{
+std::unordered_map<std::string, long> windowStyles = {
 	{"StaticWindow", WS_POPUP},
 	{"MovableWindow", WS_OVERLAPPEDWINDOW }
 };

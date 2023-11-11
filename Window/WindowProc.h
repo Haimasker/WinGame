@@ -9,5 +9,5 @@ public:
 	static LRESULT CALLBACK MovableWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 };
 
-
 #endif // WINDOW_PROC_H
+

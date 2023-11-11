@@ -1,22 +1,18 @@
 #include "Window.h"
 
-
 Window::Window(const std::string& className,
 	const std::string& windowName,
 	WindowShape shape,
-	POINT position)
-{
+	POINT position) {
 	this->shape = shape;
-	this->hwnd = this->Create(className, windowName, shape, position);
+	this->hwnd = Window::create(className, windowName, shape, position);
 	windowList.push_back(this);
 }
 
-
-HWND Window::Create(const std::string& ClassName,
+HWND Window::create(const std::string& ClassName,
 	const std::string& WindowName,
 	WindowShape shape,
-	POINT position) const
-{
+	POINT position) {
 	HWND hwnd = CreateWindowExA(DWORD(0),
 		ClassName.c_str(),
 		WindowName.c_str(),
@@ -25,10 +21,11 @@ HWND Window::Create(const std::string& ClassName,
 		position.y,
 		shape.width,
 		shape.height,
-		nullptr,
-		nullptr,
+		NULL,
+		NULL,
 		GetModuleHandleA(0),
 		nullptr);
 	ShowWindow(hwnd, SW_SHOW);
 	return hwnd;
 }
+
