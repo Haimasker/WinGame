@@ -1,15 +1,20 @@
 #include "WindowProc.h"
 #include "../Globals/Globals.h"
+#include <iostream>
 
 
-static void DrawCircle(HDC hdc) {
+static void DrawCircle(const HDC& hdc, const HWND& hwnd) {
 	SelectObject(hdc, GetStockObject(BLACK_PEN));
 	SelectObject(hdc, GetStockObject(WHITE_BRUSH));
+
+	POINT relativeCircle = circle;
+	ScreenToClient(hwnd, &relativeCircle);
+
 	Ellipse(hdc,
-			circle.x - circleRadius,
-			circle.y - circleRadius,
-			circle.x + circleRadius,
-			circle.y + circleRadius);
+			relativeCircle.x - circleRadius,
+			relativeCircle.y - circleRadius,
+			relativeCircle.x + circleRadius,
+			relativeCircle.y + circleRadius);
 }
 
 LRESULT CALLBACK WindowProc::StaticWindowProc(HWND hwnd,
@@ -23,14 +28,14 @@ LRESULT CALLBACK WindowProc::StaticWindowProc(HWND hwnd,
 		case WM_PAINT: {
 			PAINTSTRUCT ps;
 			HDC hdc = BeginPaint(hwnd, &ps);
-			windowRect = {
+			RECT windowShape = {
 				0,
 				0,
 				windowRect.right - windowRect.left,
 				windowRect.bottom - windowRect.top
 			};
-			FillRect(hdc, &windowRect, (HBRUSH)(COLOR_WINDOW + 1));
-			DrawCircle(hdc);
+			FillRect(hdc, &windowShape, (HBRUSH)(COLOR_WINDOW + 1));
+			DrawCircle(hdc, hwnd);
 			EndPaint(hwnd, &ps);
 			break;
 		}
@@ -53,15 +58,20 @@ LRESULT CALLBACK WindowProc::MovableWindowProc(HWND hwnd,
 		case WM_PAINT: {
 			PAINTSTRUCT ps;
 			HDC hdc = BeginPaint(hwnd, &ps);
-			windowRect = {
+			RECT windowShape = {
 				0,
 				0,
 				windowRect.right - windowRect.left,
 				windowRect.bottom - windowRect.top
 			};
-			FillRect(hdc, &windowRect, (HBRUSH)(COLOR_WINDOW + 1));
-			DrawCircle(hdc);
+			FillRect(hdc, &windowShape, (HBRUSH)(COLOR_WINDOW + 1));
+			DrawCircle(hdc, hwnd);
 			EndPaint(hwnd, &ps);
+			break;
+		}
+
+		case WM_MOVE: {
+			InvalidateRect(hwnd, NULL, TRUE);
 			break;
 		}
 

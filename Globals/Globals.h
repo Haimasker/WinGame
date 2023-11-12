@@ -11,9 +11,9 @@
 class Window;
 
 extern std::vector<Window*> windowList;
-extern uint16_t winSize;
+extern int16_t winSize;
 extern POINT circle;
-extern uint16_t circleRadius;
+extern int16_t circleRadius;
 
 extern int step;
 

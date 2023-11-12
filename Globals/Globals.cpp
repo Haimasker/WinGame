@@ -1,9 +1,9 @@
 #include "Globals.h"
 
 
-uint16_t winSize = 240;
+int16_t winSize = 240;
 POINT circle{ 0.5 * winSize, 0.5 * winSize };
-uint16_t circleRadius = 0.2 * winSize;
+int16_t circleRadius = 0.2 * winSize;
 
 int step = 4;
 
