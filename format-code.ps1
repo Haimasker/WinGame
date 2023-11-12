@@ -1,5 +1,5 @@
 $ASTYLE_BRACE_OPTIONS =
-	"--style=stroustrup",
+	"--style=java",
 	"--attach-namespaces",
 	"--attach-classes",
 	"--attach-inlines",
@@ -15,7 +15,8 @@ $ASTYLE_INDENT_OPTIONS =
 	"--indent-preproc-block",
 	"--indent-preproc-cond",
 	"--indent-col1-comments",
-	"--min-conditional-indent=0"
+	"--min-conditional-indent=0",
+	"--max-continuation-indent=80"
 
 $ASTYLE_PADDING_OPTIONS =
 	"--break-blocks",
