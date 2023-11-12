@@ -1,12 +1,8 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <Windows.h>
-#include <string>
-#include <vector>
-#include <iostream>
-
 #include "../Globals/Globals.h"
+
 
 struct WindowShape {
 	uint16_t height;
@@ -28,21 +24,20 @@ class Window {
 private:
 	WindowShape shape;
 	HWND hwnd;
-	
-	static HWND create(
-		const std::string& ClassName,
-		const std::string& WindowName,
-		WindowShape shape,
-		POINT position);
+
+	static HWND create(const std::string& ClassName,
+					   const std::string& WindowName,
+					   WindowShape shape,
+					   POINT position);
 public:
 	Window(const std::string& ClassName,
-		const std::string& WindowName,
-		WindowShape shape,
-		POINT position);
+		   const std::string& WindowName,
+		   WindowShape shape,
+		   POINT position);
 
-	WindowShape getShape() { return this->shape; }
-	HWND getHwnd() { return this->hwnd; }
+	WindowShape getShape() const;
+	HWND getHwnd() const;
 };
 
-#endif // WINDOW_H
 
+#endif // WINDOW_H

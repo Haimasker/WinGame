@@ -4,6 +4,9 @@
 #include <Windows.h>
 #include <unordered_map>
 #include <vector>
+#include <string>
+#include <iostream>
+
 
 class Window;
 
@@ -16,5 +19,5 @@ extern int step;
 
 extern std::unordered_map<std::string, long> windowStyles;
 
-#endif
 
+#endif // GLOBALS_H

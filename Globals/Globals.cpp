@@ -1,6 +1,5 @@
 #include "Globals.h"
 
-//std::vector<Window*> windowList = {};
 
 uint16_t winSize = 240;
 POINT circle{ 0.5 * winSize, 0.5 * winSize };
