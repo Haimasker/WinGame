@@ -2,7 +2,7 @@
 #include "Window/Window.h"
 
 
-void RegisterStaticWindowClass(const std::string& ClassName) {
+static void RegisterStaticWindowClass(const std::string& ClassName) {
 	WNDCLASSEXA wc = {};
 	wc.cbSize = sizeof(WNDCLASSEXA);
 	wc.lpfnWndProc = WindowProc::StaticWindowProc;
@@ -11,7 +11,7 @@ void RegisterStaticWindowClass(const std::string& ClassName) {
 	RegisterClassExA(&wc);
 }
 
-void RegisterMovableWindowClass(const std::string& ClassName) {
+static void RegisterMovableWindowClass(const std::string& ClassName) {
 	WNDCLASSEXA wc = {};
 	wc.cbSize = sizeof(WNDCLASSEXA);
 	wc.lpfnWndProc = WindowProc::MovableWindowProc;
@@ -20,9 +20,35 @@ void RegisterMovableWindowClass(const std::string& ClassName) {
 	RegisterClassExA(&wc);
 }
 
+static bool IsPointInWindow(POINT& point, HWND hwnd) {
+	RECT windowRect;
+	GetWindowRect(hwnd, &windowRect);
+
+	bool pointInWindow = point.x >= windowRect.left &&
+						 point.x <= windowRect.right &&
+						 point.y >= windowRect.top &&
+						 point.y <= windowRect.bottom;
+
+	return pointInWindow;
+}
+
+static bool IsCircleInWindow(HWND hwnd) {
+	POINT leftTop = { circle.x - circleRadius, circle.y - circleRadius };
+	POINT rightTop = { circle.x + circleRadius, circle.y - circleRadius };
+	POINT rightBot = { circle.x + circleRadius, circle.y + circleRadius };
+	POINT leftBot = { circle.x - circleRadius, circle.y + circleRadius };
+
+	bool circleInWindow = IsPointInWindow(leftTop, hwnd) ||
+						  IsPointInWindow(rightTop, hwnd) ||
+						  IsPointInWindow(rightBot, hwnd) ||
+						  IsPointInWindow(leftBot, hwnd);
+	return circleInWindow;
+}
+
 void RepaintAllWindows() {
 	for (auto& window : windowList)
-		InvalidateRect(window->getHwnd(), NULL, TRUE);
+		if (IsCircleInWindow(window->getHwnd()))
+			InvalidateRect(window->getHwnd(), NULL, TRUE);
 }
 
 int main() {
@@ -30,16 +56,32 @@ int main() {
 		std::cout << window->getHwnd() << "!\n";
 
 	RegisterStaticWindowClass("StaticWindow");
-	Window staticWin = Window("StaticWindow",
-							  "1",
-							  WindowShape{ winSize, winSize },
-							  POINT{ 0, 0 });
 
-	RegisterStaticWindowClass("MovableWindow");
-	Window movableWin = Window("MovableWindow",
+	Window staticWin1 = Window("StaticWindow",
+							   "1",
+							   WindowShape{ winSize, winSize },
+							   POINT{ 0, 0 });
+
+	Window staticWin2 = Window("StaticWindow",
 							   "2",
 							   WindowShape{ winSize, winSize },
-							   POINT{ long(1.5 * winSize), 0 });
+							   POINT{ long(1.1 * winSize), 0 });
+
+	Window staticWin3 = Window("StaticWindow",
+							   "3",
+							   WindowShape{ winSize, winSize },
+							   POINT{ 0, long(1.1 * winSize) });
+
+	Window staticWin4 = Window("StaticWindow",
+							   "4",
+							   WindowShape{ winSize, winSize },
+							   POINT{ long(1.1 * winSize), long(1.1 * winSize) });
+
+	RegisterMovableWindowClass("MovableWindow");
+	Window movableWin1 = Window("MovableWindow",
+								"5",
+								WindowShape{ winSize, winSize },
+								POINT{ long(2.2 * winSize), 0 });
 
 	MSG msg { 0 };
 
